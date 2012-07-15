@@ -4,6 +4,8 @@ module Gazouillis
     include Celluloid::IO
     HOST = "stream.twitter.com"
 
+    attr_reader :http_parser, :headers, :status_code
+
     def initialize(path, auth)
       @path = path
       @auth = auth
@@ -14,13 +16,24 @@ module Gazouillis
       ssl.connect
 
       @stream = ssl
+
+      @http_parser = Http::Parser.new
+      @http_parser.on_headers_complete = proc{ :stop }
     end
 
     def listen
       @stream.write request
 
       @stream.each_line do |line|
-        $stderr.puts line
+        # end of the headers
+        if line == "\r\n"
+          @headers     = http_parser.headers
+          @status_code = http_parser.status_code
+        elsif headers
+          $stderr.puts line unless line.match /\w\r\n/
+        else
+          http_parser << line
+        end
       end
     end
 
