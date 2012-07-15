@@ -29,7 +29,9 @@ module Gazouillis
         if line == "\r\n"
           @headers     = http_parser.headers
           @status_code = http_parser.status_code
+          # TODO : if status_code's not 200 : break and delegates to a handler.
         elsif headers
+          # TODO : delegates response to a handler. Job's done.
           $stderr.puts MultiJson.load(line) unless line.match /\w\r\n/
         else
           http_parser << line
@@ -39,6 +41,8 @@ module Gazouillis
 
     private
 
+    # TODO : a real request object, with nice headers.
+    #
     def request
       request = "GET #{@path} HTTP/1.1\r\n"
       request << "Host: #{HOST}\r\n"
