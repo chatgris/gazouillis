@@ -30,7 +30,7 @@ module Gazouillis
           @headers     = http_parser.headers
           @status_code = http_parser.status_code
           # TODO : if status_code's not 200 : break and delegates to a handler.
-        elsif headers
+        elsif status_code == 200
           # TODO : delegates response to a handler. Job's done.
           $stderr.puts MultiJson.load(line) unless line.match /\w\r\n/
         else
