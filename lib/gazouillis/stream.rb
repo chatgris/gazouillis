@@ -30,7 +30,7 @@ module Gazouillis
           @headers     = http_parser.headers
           @status_code = http_parser.status_code
         elsif headers
-          $stderr.puts line unless line.match /\w\r\n/
+          $stderr.puts MultiJson.load(line) unless line.match /\w\r\n/
         else
           http_parser << line
         end
