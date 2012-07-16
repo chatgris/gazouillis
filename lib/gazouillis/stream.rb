@@ -32,7 +32,7 @@ module Gazouillis
           # TODO : if status_code's not 200 : break and delegates to a handler.
         elsif status_code == 200 && !line.match(/\w\r\n/)
           # TODO : delegates response to a handler. Job's done.
-          $stderr.puts MultiJson.load(line)
+          $stderr.puts MultiJson.load(line, symbolize_keys: true)
         else
           http_parser << line
         end
