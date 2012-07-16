@@ -1,5 +1,7 @@
 # encoding: utf-8
 module Gazouillis
+  # This class concern is to handle stream connections.
+  #
   class Stream
     include Celluloid::IO
     HOST = "stream.twitter.com"
