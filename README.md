@@ -10,8 +10,14 @@ Very early stage. Not ready for production.
 
 ``` ruby
 require 'gazouillis'
-Gazouillis::Stream.new('/1/statuses/sample.json',
-                       {user: 'user', passord: 'pass'}).listen
+
+options = {
+  auth: {
+    user: 'user',
+    password: 'password'
+  }
+}
+Gazouillis::Stream.new('/1/statuses/sample.json', options).listen
 ```
 
 ## Note on Patches/Pull Requests

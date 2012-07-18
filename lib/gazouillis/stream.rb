@@ -4,13 +4,11 @@ module Gazouillis
   #
   class Stream
     include Celluloid::IO
-    HOST = "stream.twitter.com"
 
     attr_reader :http_parser, :headers, :status_code
 
-    def initialize(path, auth)
-      @path = path
-      @auth = auth
+    def initialize(path, opts)
+      @options = default_options.merge(opts).merge(path: path)
 
       socket = TCPSocket.new "stream.twitter.com", 443
       ssl = OpenSSL::SSL::SSLSocket.new(socket.to_io, OpenSSL::SSL::SSLContext.new)
@@ -34,7 +32,7 @@ module Gazouillis
           # TODO : if status_code's not 200 : break and delegates to a handler.
         elsif status_code == 200 && !line.match(/\w\r\n/)
           # TODO : delegates response to a handler. Job's done.
-          $stderr.puts MultiJson.load(line, symbolize_keys: true)
+          MultiJson.load(line, symbolize_keys: true)
         else
           http_parser << line
         end
@@ -46,15 +44,22 @@ module Gazouillis
     # TODO : a real request object, with nice headers.
     #
     def request
-      request = "GET #{@path} HTTP/1.1\r\n"
-      request << "Host: #{HOST}\r\n"
+      request = "GET #{@options[:path]} HTTP/1.1\r\n"
+      request << "Host: #{@options[:host]}\r\n"
       request << "Authorization: Basic #{basic_auth}\r\n"
       request << "\r\n"
       request
     end
 
     def basic_auth
-      ["#{@auth[:user]}:#{@auth[:passord]}"].pack('m').strip
+      ["#{@options[:auth][:user]}:#{@options[:auth][:passord]}"].pack('m').strip
+    end
+
+    def default_options
+      {
+        host: 'stream.twitter.com',
+        port: 443
+      }
     end
   end
 end
