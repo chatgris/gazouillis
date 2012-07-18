@@ -5,8 +5,6 @@ module Gazouillis
   class Stream
     include Celluloid::IO
 
-    attr_reader :http_parser, :headers, :status_code
-
     def initialize(path, opts)
       @options = default_options.merge(opts).merge(path: path)
 
@@ -18,28 +16,22 @@ module Gazouillis
       @stream = ssl
 
       @http_parser = Http::Parser.new
-      @http_parser.on_headers_complete = proc{ :stop }
+      @http_parser.on_body = on_message
     end
 
     def listen
       @stream.write request
 
-      @stream.each_line do |line|
-        # end of the headers
-        if line == "\r\n"
-          @headers     = http_parser.headers
-          @status_code = http_parser.status_code
-          # TODO : if status_code's not 200 : break and delegates to a handler.
-        elsif status_code == 200 && !line.match(/\w\r\n/)
-          # TODO : delegates response to a handler. Job's done.
-          MultiJson.load(line, symbolize_keys: true)
-        else
-          http_parser << line
-        end
-      end
+      @stream.each_line {|line| @http_parser << line }
     end
 
     private
+
+    def on_message
+      Proc.new do |chunk|
+        MultiJson.load(chunk, symbolize_keys: true)
+      end
+    end
 
     # TODO : a real request object, with nice headers.
     #
