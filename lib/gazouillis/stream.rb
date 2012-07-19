@@ -16,20 +16,35 @@ module Gazouillis
       @stream = ssl
 
       @http_parser = Http::Parser.new
+
       @http_parser.on_body = on_message
+      @http_parser.on_headers_complete = on_headers_complete
     end
 
-    def listen
+    def open
       @stream.write request
+      handle_connection!
+    end
 
-      @stream.each_line {|line| @http_parser << line }
+    def close
+      @stream.to_io.close
     end
 
     private
 
+    def handle_connection
+      @stream.each_line {|line| @http_parser << line } unless @stream.closed?
+    end
+
     def on_message
       Proc.new do |chunk|
         MultiJson.load(chunk, symbolize_keys: true)
+      end
+    end
+
+    def on_headers_complete
+      Proc.new do
+        Actor.current.close if @http_parser.status_code != 200
       end
     end
 

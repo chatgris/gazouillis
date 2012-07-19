@@ -17,7 +17,7 @@ options = {
     password: 'password'
   }
 }
-Gazouillis::Stream.new('/1/statuses/sample.json', options).listen
+Gazouillis::Stream.new('/1/statuses/sample.json', options).open!
 ```
 
 ## Note on Patches/Pull Requests
