@@ -17,7 +17,7 @@ module Gazouillis
 
       @http_parser = Http::Parser.new
 
-      @http_parser.on_body = on_message
+      @http_parser.on_body = on_message_callback
       @http_parser.on_headers_complete = on_headers_complete
     end
 
@@ -30,15 +30,19 @@ module Gazouillis
       @stream.to_io.close
     end
 
+    def on_message(message)
+      # Hook method. To be override.
+    end
+
     private
 
     def handle_connection
       @stream.each_line {|line| @http_parser << line } unless @stream.closed?
     end
 
-    def on_message
+    def on_message_callback
       Proc.new do |chunk|
-        MultiJson.load(chunk, symbolize_keys: true)
+        Actor.current.on_message chunk
       end
     end
 
