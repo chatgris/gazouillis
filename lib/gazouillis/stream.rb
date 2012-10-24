@@ -63,7 +63,7 @@ module Gazouillis
     end
 
     def basic_auth
-      ["#{@options[:auth][:user]}:#{@options[:auth][:passord]}"].pack('m').strip
+      ["#{@options[:auth][:user]}:#{@options[:auth][:password]}"].pack('m').strip
     end
 
     def default_options
