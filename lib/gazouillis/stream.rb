@@ -23,7 +23,7 @@ module Gazouillis
 
     def open
       @stream.write request
-      handle_connection!
+      handle_connection
     end
 
     def close
