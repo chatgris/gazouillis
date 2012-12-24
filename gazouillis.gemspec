@@ -8,11 +8,10 @@ Gem::Specification.new do |s|
   s.version       = Gazouillis::VERSION
   s.authors       = ["chatgris"]
   s.email         = ["jboyer@af83.com"]
-  s.homepage      = "https://github.com/chatgris/gazouillis"
+  s.homepage      = "http://chatgris.github.com/gazouillis"
   s.summary       = "Twitter stream client."
   s.description   = "Twitter stream client."
-
-  s.files         = `git ls-files lib`.split("\n")
+  s.files         = `git ls-files lib LICENSE README.md`.split("\n")
   s.platform      = Gem::Platform::RUBY
   s.require_paths = ['lib']
   s.add_dependency "celluloid-io"
