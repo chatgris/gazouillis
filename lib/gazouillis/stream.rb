@@ -61,6 +61,7 @@ module Gazouillis
     def request
       request = "#{method} #{path} HTTP/1.1\r\n"
       request << "Host: #{@options[:host]}\r\n"
+      request << "User-Agent: Gazouillis #{Gazouillis::VERSION}\r\n"
       request << "Authorization: #{oauth}\r\n"
       request << "\r\n"
       request

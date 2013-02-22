@@ -41,6 +41,10 @@ Tweets.new('/1/statuses/sample.json', options).open!
 
 ### 0.2.0
 
+  * UserStream.
+
+### 0.3.0
+
   * Reconnector object.
 
 ## Copyright
