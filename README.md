@@ -22,11 +22,14 @@ class Tweets < Gazouillis::Stream
 end
 
 options = {
-  auth: {
-    user: 'user',
-    password: 'password'
+  oauth: {
+    consumer_key:    "consumer_key",
+    consumer_secret: "consumer_secret",
+    token:           "token",
+    token_secret:    "token_secret"
   }
 }
+
 Tweets.new('/1/statuses/sample.json', options).open!
 ```
 
@@ -34,11 +37,11 @@ Tweets.new('/1/statuses/sample.json', options).open!
 
 ### 0.1.0
 
-  * Reconnector object.
-
-### 1.0.0
-
   * Oauth.
+
+### 0.2.0
+
+  * Reconnector object.
 
 ## Copyright
 
