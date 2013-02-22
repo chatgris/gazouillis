@@ -35,10 +35,6 @@ Tweets.new('/1/statuses/sample.json', options).open!
 
 ## Roadmap
 
-### 0.1.0
-
-  * Oauth.
-
 ### 0.2.0
 
   * UserStream, FilterStream and SampleStream
