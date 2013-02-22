@@ -67,10 +67,6 @@ Hence the `async` capability.
 
 ## Roadmap
 
-### 0.1.0
-
-  * Oauth.
-
 ### 0.2.0
 
   * UserStream, FilterStream and SampleStream
