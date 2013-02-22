@@ -75,6 +75,11 @@ Hence the `async` capability.
 
   * Reconnector object.
 
+
+## Example
+
+  * [Gazouillis sinatra](https://github.com/chatgris/gazouillis_sinatra)
+
 ## Copyright
 
 MIT. See LICENSE for further details.
