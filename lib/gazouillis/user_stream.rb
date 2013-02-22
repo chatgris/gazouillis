@@ -1,13 +1,15 @@
 # encoding: utf-8
 module Gazouillis
-  # This class concern is to handle stream connections.
+  # This class concern is to handle connections to_user_stream.
   #
   class UserStream < Stream
+    API_VERSION = "1.1"
+
     def initialize(opts)
       opts.merge!({
         host: "userstream.twitter.com"
       })
-      super "/1.1/user.json", opts
+      super "/#{API_VERSION}/user.json", opts
     end
   end
 end
