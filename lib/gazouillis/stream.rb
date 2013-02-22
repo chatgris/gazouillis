@@ -4,9 +4,13 @@ module Gazouillis
   #
   class Stream
     include Celluloid::IO
+    attr_reader :host, :path, :method
 
     def initialize(path, opts)
-      @options = default_options.merge(opts).merge(path: path)
+      @options = default_options.merge(opts)
+      @path = path
+      @host = opts.fetch(:host, "stream.twitter.com")
+      @method = opts.fetch(:method, "GET")
 
       socket = TCPSocket.new "stream.twitter.com", 443
       ssl = OpenSSL::SSL::SSLSocket.new(socket.to_io, OpenSSL::SSL::SSLContext.new)
@@ -55,15 +59,19 @@ module Gazouillis
     # TODO : a real request object, with nice headers.
     #
     def request
-      request = "GET #{@options[:path]} HTTP/1.1\r\n"
+      request = "#{method} #{path} HTTP/1.1\r\n"
       request << "Host: #{@options[:host]}\r\n"
-      request << "Authorization: Basic #{basic_auth}\r\n"
+      request << "Authorization: #{oauth}\r\n"
       request << "\r\n"
       request
     end
 
-    def basic_auth
-      ["#{@options[:auth][:user]}:#{@options[:auth][:password]}"].pack('m').strip
+    def oauth
+      SimpleOAuth::Header.new method, full_url, {}, @options[:oauth]
+    end
+
+    def full_url
+      "https://#{host}#{path}"
     end
 
     def default_options

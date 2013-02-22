@@ -16,4 +16,5 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.add_dependency "celluloid-io"
   s.add_dependency "http_parser.rb"
+  s.add_dependency "simple_oauth"
 end
