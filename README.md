@@ -41,7 +41,7 @@ Tweets.new('/1/statuses/sample.json', options).open!
 
 ### 0.2.0
 
-  * UserStream.
+  * UserStream, FilterStream and SampleStream
 
 ### 0.3.0
 
