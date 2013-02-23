@@ -67,9 +67,11 @@
 <span class="k">end</span>
 
 <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="n">auth</span><span class="p">:</span> <span class="p">{</span>
-    <span class="n">user</span><span class="p">:</span> <span class="s1">'user'</span><span class="p">,</span>
-    <span class="n">password</span><span class="p">:</span> <span class="s1">'password'</span>
+  <span class="n">oauth</span><span class="p">:</span> <span class="p">{</span>
+    <span class="n">consumer_key</span><span class="p">:</span>    <span class="s2">"consumer_key"</span><span class="p">,</span>
+    <span class="n">consumer_secret</span><span class="p">:</span> <span class="s2">"consumer_secret"</span><span class="p">,</span>
+    <span class="n">token</span><span class="p">:</span>           <span class="s2">"token"</span><span class="p">,</span>
+    <span class="n">token_secret</span><span class="p">:</span>    <span class="s2">"token_secret"</span>
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="no">Tweets</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'/1/statuses/sample.json'</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span><span class="o">.</span><span class="n">open!</span>
@@ -77,14 +79,18 @@
 
 <h2>Roadmap</h2>
 
-<h3>0.1.0</h3>
+<h3>0.2.0</h3>
+
+<ul>
+<li>UserStream, FilterStream and SampleStream</li>
+</ul><h3>0.3.0</h3>
 
 <ul>
 <li>Reconnector object.</li>
-</ul><h3>1.0.0</h3>
+</ul><h2>Example</h2>
 
 <ul>
-<li>Oauth.</li>
+<li><a href="https://github.com/chatgris/gazouillis_sinatra">Gazouillis sinatra</a></li>
 </ul>
       </section>
 
@@ -102,6 +108,16 @@
 
     </div>
 
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-38746987-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
