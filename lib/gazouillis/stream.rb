@@ -4,34 +4,24 @@ module Gazouillis
   #
   class Stream
     include Celluloid::IO
-    attr_reader :host, :path, :method
+    attr_reader :request, :stream, :http_parser
 
     def initialize(path, opts)
-      @options = default_options.merge(opts)
-      @path = path
-      @host = opts.fetch(:host, "stream.twitter.com")
-      @method = opts.fetch(:method, "GET")
-
-      socket = TCPSocket.new "stream.twitter.com", 443
-      ssl = OpenSSL::SSL::SSLSocket.new(socket.to_io, OpenSSL::SSL::SSLContext.new)
-      ssl.sync = true
-      ssl.connect
-
-      @stream = ssl
-
+      options = default_options.merge(opts)
+      @request = Request.new(path, options)
+      @stream = set_stream(TCPSocket.new options[:host], options[:port])
       @http_parser = Http::Parser.new
-
-      @http_parser.on_body = on_message_callback
-      @http_parser.on_headers_complete = on_headers_complete
+      http_parser.on_body = on_message_callback
+      http_parser.on_headers_complete = on_headers_complete
     end
 
     def open
-      @stream.write request
+      stream.write request
       handle_connection
     end
 
     def close
-      @stream.to_io.close
+      stream.to_io.close
     end
 
     def on_message(message)
@@ -40,8 +30,16 @@ module Gazouillis
 
     private
 
+    def set_stream(socket)
+      OpenSSL::SSL::SSLSocket.new(socket.to_io,
+                                  OpenSSL::SSL::SSLContext.new).tap {|ssl|
+        ssl.sync = true
+        ssl.connect
+      }
+    end
+
     def handle_connection
-      @stream.each_line {|line| @http_parser << line } unless @stream.closed?
+      stream.each_line {|line| http_parser << line } unless stream.closed?
     end
 
     def on_message_callback
@@ -52,33 +50,15 @@ module Gazouillis
 
     def on_headers_complete
       Proc.new do
-        Actor.current.close if @http_parser.status_code != 200
+        Actor.current.close if http_parser.status_code != 200
       end
-    end
-
-    # TODO : a real request object, with nice headers.
-    #
-    def request
-      request = "#{method} #{path} HTTP/1.1\r\n"
-      request << "Host: #{@options[:host]}\r\n"
-      request << "User-Agent: Gazouillis #{Gazouillis::VERSION}\r\n"
-      request << "Authorization: #{oauth}\r\n"
-      request << "\r\n"
-      request
-    end
-
-    def oauth
-      SimpleOAuth::Header.new method, full_url, {}, @options[:oauth]
-    end
-
-    def full_url
-      "https://#{host}#{path}"
     end
 
     def default_options
       {
         host: 'stream.twitter.com',
-        port: 443
+        port: 443,
+        method: "GET"
       }
     end
   end

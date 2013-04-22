@@ -1,5 +1,10 @@
 # gazouillis
 
+[![Code
+Climate](https://codeclimate.com/github/chatgris/gazouillis.png)](https://codeclimate.com/github/chatgris/gazouillis)
+[![Gem
+Version](https://badge.fury.io/rb/gazouillis.png)](http://badge.fury.io/rb/gazouillis)
+
 Gazouillis aims to be a fast and reliable twitter stream client.
 
 ## Status
