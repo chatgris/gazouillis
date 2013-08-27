@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage      = "http://chatgris.github.com/gazouillis"
   s.summary       = "Twitter stream client."
   s.description   = "Twitter stream client."
+  s.license      = 'MIT'
   s.files         = `git ls-files lib LICENSE README.md`.split("\n")
   s.platform      = Gem::Platform::RUBY
   s.require_paths = ['lib']
