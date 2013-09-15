@@ -11,8 +11,8 @@ module Gazouillis
       @request = Request.new(path, options)
       @stream = set_stream(TCPSocket.new options[:host], options[:port])
       @http_parser = Http::Parser.new
-      http_parser.on_body = on_message_callback
-      http_parser.on_headers_complete = on_headers_complete
+      http_parser.on_body = method(:on_message)
+      http_parser.on_headers_complete = method(:on_headers_complete)
     end
 
     def open
@@ -42,16 +42,8 @@ module Gazouillis
       stream.each_line {|line| http_parser << line } unless stream.closed?
     end
 
-    def on_message_callback
-      Proc.new do |chunk|
-        Actor.current.on_message chunk
-      end
-    end
-
-    def on_headers_complete
-      Proc.new do
-        Actor.current.close if http_parser.status_code != 200
-      end
+    def on_headers_complete(headers)
+      Actor.current.close if http_parser.status_code != 200
     end
 
     def default_options
